@@ -1,3 +1,5 @@
+const save = document.querySelector('.cart__items');
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -30,9 +32,9 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-function cartItemClickListener(event) {
-  const cartList = document.querySelector('.cart__items');
-  cartList.removeChild(event.target);
+async function cartItemClickListener(event) {
+  event.target.remove();
+  localStorage.getItem('cartItems').includes(event.target).replace(event.target);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -40,19 +42,19 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
+  
   return li;
 }
 
 async function addCarItem(id) {
   const products = await fetchItem(id);
-  const addCart = document.querySelector('.cart__items');
+  const addCart = save;
   const obj = {
     sku: products.id,
     name: products.title,
     salePrice: products.price,
     image: products.thumbnail,
   };
-
   addCart.appendChild(createCartItemElement(obj));
 }
 
@@ -75,4 +77,6 @@ async function createProductItem() {
 
 window.onload = () => {
   createProductItem();
+  save.innerHTML = getSavedCartItems('cartItems');
+  document.onclick = () => saveCartItems('cartItems', save.innerHTML);
 };
