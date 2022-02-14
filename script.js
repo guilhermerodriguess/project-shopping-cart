@@ -61,10 +61,17 @@ async function addCarItem(id) {
   addCart.appendChild(createCartItemElement(obj));
 }
 
+function loading(element) {
+  const screenLoading = createCustomElement('div', 'loading', 'Loading');
+  element.appendChild(screenLoading);
+}
+
 async function createProductItem() {
   const productList = document.querySelector('.items');
   loading(productList);
   const products = await fetchProducts('computador');
+  const loadingText = document.querySelector('.loading');
+  productList.removeChild(loadingText);
 
   return products.results.forEach((product, index) => {
     const obj = {
@@ -79,10 +86,6 @@ async function createProductItem() {
   });
 }
 
-function loading(element) {
-  const screenLoading = createCustomElement('div', 'loading', 'Loading');
-  element.appendChild(screenLoading);
-}
 
 window.onload = () => {
   createProductItem();
