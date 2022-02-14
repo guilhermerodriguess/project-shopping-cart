@@ -86,7 +86,6 @@ async function createProductItem() {
   });
 }
 
-
 window.onload = () => {
   createProductItem();
   save.innerHTML = getSavedCartItems('cartItems');
